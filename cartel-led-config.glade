@@ -2,7 +2,13 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
-  <object class="GtkWindow" id="window1">
+  <object class="GtkWindow" id="configuracion">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Configuraci&#xF3;n</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="window_position">center</property>
+    <property name="destroy_with_parent">True</property>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -91,18 +97,19 @@
           <object class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
             <child>
-              <object class="GtkButton" id="button1">
+              <object class="GtkButton" id="encender">
                 <property name="label" translatable="yes">Encender</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_encender_clicked"/>
               </object>
               <packing>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="button2">
+              <object class="GtkButton" id="limpiar">
                 <property name="label" translatable="yes">Limpiar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
