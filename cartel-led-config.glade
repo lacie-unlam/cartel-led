@@ -17,7 +17,7 @@
           <placeholder/>
         </child>
         <child>
-          <object class="GtkTable" id="table1">
+          <object class="GtkTable" id="tabla">
             <property name="visible">True</property>
             <property name="n_rows">3</property>
             <property name="n_columns">2</property>
@@ -48,19 +48,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBox" id="func_mate">
-                <property name="visible">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinButton" id="frecuencia">
+              <object class="GtkSpinButton" id="spinbutton1">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x25CF;</property>
+                <property name="adjustment">frecuencia</property>
                 <property name="climb_rate">0.10000000000000001</property>
                 <property name="digits">2</property>
                 <property name="numeric">True</property>
@@ -73,10 +65,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="dezpla_fase">
+              <object class="GtkSpinButton" id="spinbutton2">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x25CF;</property>
+                <property name="adjustment">fase</property>
                 <property name="climb_rate">0.10000000000000001</property>
                 <property name="digits">2</property>
                 <property name="numeric">True</property>
@@ -87,6 +80,9 @@
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
           <packing>
@@ -126,5 +122,17 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkAdjustment" id="frecuencia">
+    <property name="lower">1</property>
+    <property name="upper">10</property>
+    <property name="step_increment">0.5</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="fase">
+    <property name="lower">1</property>
+    <property name="upper">5</property>
+    <property name="step_increment">0.5</property>
+    <property name="page_increment">1</property>
   </object>
 </interface>
