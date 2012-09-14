@@ -103,6 +103,18 @@
           <object class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
             <child>
+              <object class="GtkToggleButton" id="transmitiendo">
+                <property name="label" translatable="yes">Reanudar</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="toggled" handler="on_transmitiendo_toggled"/>
+              </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="encender">
                 <property name="label" translatable="yes">Encender</property>
                 <property name="visible">True</property>
@@ -111,7 +123,7 @@
                 <signal name="clicked" handler="on_encender_clicked"/>
               </object>
               <packing>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -122,7 +134,7 @@
                 <property name="receives_default">True</property>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>

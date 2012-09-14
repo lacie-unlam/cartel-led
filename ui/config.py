@@ -51,3 +51,9 @@ class Configuracion:
 
     def on_limpiar_clicked(self, widget):
         self.matriz.clear()
+
+    def on_transmitiendo_toggled(self, widget):
+        if widget.get_active():
+            widget.set_label('Pausar')
+        else:
+            widget.set_label('Reanudar')
