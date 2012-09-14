@@ -14,7 +14,17 @@
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <child>
-          <placeholder/>
+          <object class="GtkVBox" id="container">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="homogeneous">True</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="position">0</property>
+          </packing>
         </child>
         <child>
           <object class="GtkTable" id="tabla">
