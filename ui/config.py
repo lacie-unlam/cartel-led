@@ -3,7 +3,7 @@
 import gtk
 import os
 
-from lib.matriz import Matriz
+from matriz_leds import MatrizLeds
 from func_mate import FuncMate
 
 class Configuracion:
@@ -12,9 +12,10 @@ class Configuracion:
 
     def __init__(self, leds_horizontales, leds_verticales): 
         self.leds_horizontales, self.leds_verticales = int(leds_horizontales), int(leds_verticales)
-        self.matriz = Matriz(self.leds_verticales, self.leds_horizontales)
         self.build_ui_from_xml()
-        self.build_preview()
+        self.matriz_leds = MatrizLeds(self.leds_horizontales, self.leds_verticales)
+        self.container.pack_start(self.matriz_leds)
+        self.container.reorder_child(self.matriz_leds, 0)
 
     def on_configuracion_delete_event(self, widget, data=None):
         return False
@@ -35,22 +36,14 @@ class Configuracion:
         self.fase = self.builder.get_object('fase')
         self.fase.set_value(self.FASE)
 
-    def build_preview(self):
-        for i in range(self.leds_verticales):
-            hbox = gtk.HBox(True)
-            for i in range(self.leds_horizontales):
-                group = gtk.RadioButton()
-                hbox.pack_start(gtk.RadioButton(group))
-            self.container.pack_start(hbox)
-
     def show(self):
         self.window.show_all()
 
     def on_encender_clicked(self, widget):
-        self.matriz.set()
+        self.matriz_leds.encender()
 
     def on_limpiar_clicked(self, widget):
-        self.matriz.clear()
+        self.matriz_leds.limpiar()
 
     def on_transmitiendo_toggled(self, widget):
         if widget.get_active():
