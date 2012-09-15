@@ -30,6 +30,7 @@ class Cuadrada(Funcion):
 	def execute(self):
 		self.matriz[self.pos_anterior()] = False
 		self.matriz[self.fila, self.columna] = True
+		self.matriz.changed()
 		# pprint(self.matriz.data)
 		self.callback()
 		self.pos_siguiente()

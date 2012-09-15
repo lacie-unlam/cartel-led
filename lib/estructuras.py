@@ -1,3 +1,5 @@
+from pprint import pprint
+
 class Matriz:
     def __init__(self, filas, columnas):
         self._filas, self._columnas = filas, columnas
@@ -33,3 +35,7 @@ class Matriz:
     def __reset__(self, value):
         for i, j in self.each_index():
             self.data[i][j] = value
+        self.changed()
+
+    def changed(self):
+        pprint(self.data)
