@@ -3,20 +3,18 @@
 import gtk
 import os
 
-from config import Configuracion
+from config import Config
 
-class Inicio:
+class App:
     LEDS_HORIZONTALES = 16
     LEDS_VERTICALES = 4
 
     def __init__(self):
         self.build_ui_from_xml()
         self.set_default_values()
-
-    def run(self):
         gtk.main()
 
-    def on_inicio_delete_event(self, widget, data=None):
+    def on_window_delete_event(self, widget, data=None):
         gtk.main_quit()
         return False
 
@@ -32,5 +30,5 @@ class Inicio:
         self.leds_verticales.set_value(self.LEDS_VERTICALES)
 
     def on_crear_cartel_clicked(self, widget):
-        config = Configuracion(self.leds_horizontales.get_value(), self.leds_verticales.get_value())
+        config = Config(self.leds_horizontales.get_value(), self.leds_verticales.get_value())
         config.show()

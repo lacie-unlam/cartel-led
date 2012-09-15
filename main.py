@@ -2,8 +2,7 @@
 
 # -*- coding: UTF-8 -*-
 
-from ui.inicio import Inicio
+from ui.app import App
 
-if __name__ == "__main__":
-    app = Inicio()
-    app.run()
+if __name__ == '__main__':
+    App()

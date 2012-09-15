@@ -2,13 +2,14 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
-  <object class="GtkWindow" id="configuracion">
+  <object class="GtkWindow" id="window">
     <property name="visible">True</property>
     <property name="title" translatable="yes">Configuraci&#xF3;n</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
+    <signal name="delete_event" handler="on_window_delete_event"/>
     <child>
       <object class="GtkVBox" id="container">
         <property name="visible">True</property>
@@ -93,12 +94,13 @@
           <object class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
             <child>
-              <object class="GtkToggleButton" id="transmitiendo">
-                <property name="label" translatable="yes">Reanudar</property>
+              <object class="GtkToggleButton" id="on_off_btn">
+                <property name="label" translatable="yes">Parar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="toggled" handler="on_transmitiendo_toggled"/>
+                <property name="active">True</property>
+                <signal name="toggled" handler="on_off_btn_toggled_cb"/>
               </object>
               <packing>
                 <property name="position">0</property>
@@ -122,6 +124,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_limpiar_clicked"/>
               </object>
               <packing>
                 <property name="position">2</property>
