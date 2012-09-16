@@ -5,9 +5,9 @@ from time import sleep
 from pprint import pprint
 
 class Funcion(Thread):
-	def __init__(self, matriz, callback):
+	def __init__(self, matriz, callback, fase):
 		Thread.__init__(self)
-		self.matriz, self.callback = matriz, callback
+		self.matriz, self.callback, self.fase = matriz, callback, fase
 		self.is_running = True
 
 	def run(self):
@@ -23,8 +23,8 @@ class Funcion(Thread):
 
 
 class Cuadrada(Funcion):
-	def __init__(self, matriz, callback):
-		super(self.__class__, self).__init__(matriz, callback)
+	def __init__(self, matriz, callback, fase):
+		super(self.__class__, self).__init__(matriz, callback, fase)
 		self.fila, self.columna = 0, 0
 
 	def execute(self):
@@ -34,7 +34,7 @@ class Cuadrada(Funcion):
 		# pprint(self.matriz.data)
 		self.callback()
 		self.pos_siguiente()
-		sleep(1)
+		sleep(self.fase)
 
 	def columna_anterior(self):
 		return (self.columna if self.columna else self.matriz.columnas)-1

@@ -34,7 +34,7 @@ class ComboFunciones:
 
 
 class MatrizLeds(gtk.VBox):
-    def __init__(self, leds_horizontales, leds_verticales):
+    def __init__(self, leds_horizontales, leds_verticales, fase):
         super(self.__class__, self).__init__(True)
         gobject.threads_init()
         self.matriz = Matriz(leds_verticales, leds_horizontales)
@@ -47,7 +47,7 @@ class MatrizLeds(gtk.VBox):
                 hbox.pack_start(gtk.RadioButton(self.on_leds[i, j]))
             self.pack_start(hbox)
 
-        self.start()
+        self.start(fase)
 
     def set(self):
         self.destroy()
@@ -71,6 +71,6 @@ class MatrizLeds(gtk.VBox):
         if self.funcion.is_alive():
             self.funcion.stop()
 
-    def start(self):
-        self.funcion = Cuadrada(self.matriz, lambda: gobject.idle_add(self.update_ui))
+    def start(self, fase):
+        self.funcion = Cuadrada(self.matriz, lambda: gobject.idle_add(self.update_ui), fase)
         self.funcion.start()

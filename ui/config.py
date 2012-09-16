@@ -14,7 +14,7 @@ class Config:
     def __init__(self, leds_horizontales, leds_verticales): 
         self.leds_horizontales, self.leds_verticales = int(leds_horizontales), int(leds_verticales)
         self.build_ui_from_xml()
-        self.matriz_leds = MatrizLeds(self.leds_horizontales, self.leds_verticales)
+        self.matriz_leds = MatrizLeds(self.leds_horizontales, self.leds_verticales, self.FASE)
         self.container.pack_start(self.matriz_leds)
         self.container.reorder_child(self.matriz_leds, 0)
 
@@ -54,10 +54,14 @@ class Config:
             self.matriz_leds.clear()
             widget.set_label(self.ON_OFF_BTN_OFF)
         else:
-            self.matriz_leds.start()
+            self.matriz_leds.start(self.fase.get_value())
             widget.set_label(self.ON_OFF_BTN_ON)
 
     def on_off_btn_off(self):
         if self.on_off_btn.get_active():
             self.on_off_btn.set_active(False)
             self.on_off_btn.set_label(self.ON_OFF_BTN_OFF)
+
+    def on_fase_value_changed(self, fase):
+        self.matriz_leds.clear()
+        self.matriz_leds.start(fase.get_value())
