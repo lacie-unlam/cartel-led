@@ -8,6 +8,7 @@ from widgets import ComboFunciones, MatrizLeds
 class Config:
     FRECUENCIA = 1.0
     FASE = 1.0
+    ON_OFF_BTN_ON = 'Parar'
     ON_OFF_BTN_OFF = 'Continuar'
 
     def __init__(self, leds_horizontales, leds_verticales): 
@@ -48,13 +49,13 @@ class Config:
         self.on_off_btn_off()
         self.matriz_leds.clear()
 
-    def on_off_btn_toggled_cb(self, widget):
-        if widget.get_active():
-            widget.set_label('Parar')
-            self.matriz_leds.start()
-        else:
-            widget.set_label(self.ON_OFF_BTN_OFF)
+    def on_off_btn_clicked_cb(self, widget):
+        if widget.get_label() == self.ON_OFF_BTN_ON:
             self.matriz_leds.clear()
+            widget.set_label(self.ON_OFF_BTN_OFF)
+        else:
+            self.matriz_leds.start()
+            widget.set_label(self.ON_OFF_BTN_ON)
 
     def on_off_btn_off(self):
         if self.on_off_btn.get_active():

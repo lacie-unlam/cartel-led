@@ -94,13 +94,12 @@
           <object class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
             <child>
-              <object class="GtkToggleButton" id="on_off_btn">
+              <object class="GtkButton" id="on_off_btn">
                 <property name="label" translatable="yes">Parar</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="active">True</property>
-                <signal name="toggled" handler="on_off_btn_toggled_cb"/>
+                <signal name="clicked" handler="on_off_btn_clicked_cb"/>
               </object>
               <packing>
                 <property name="position">0</property>
