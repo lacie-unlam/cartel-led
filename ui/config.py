@@ -8,7 +8,7 @@ from widgets import ComboFunciones, MatrizLeds
 class Config:
     FRECUENCIA = 1.0
     FASE = 1.0
-    ON_OFF_BTN_OFF = 'Transferir'
+    ON_OFF_BTN_OFF = 'Continuar'
 
     def __init__(self, leds_horizontales, leds_verticales): 
         self.leds_horizontales, self.leds_verticales = int(leds_horizontales), int(leds_verticales)

@@ -6,8 +6,8 @@ import os
 from config import Config
 
 class App:
-    LEDS_HORIZONTALES = 16
-    LEDS_VERTICALES = 4
+    LEDS_HORIZONTALES = 48
+    LEDS_VERTICALES = 8
 
     def __init__(self):
         self.build_ui_from_xml()

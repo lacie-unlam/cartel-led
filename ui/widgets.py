@@ -38,11 +38,13 @@ class MatrizLeds(gtk.VBox):
         super(self.__class__, self).__init__(True)
         gobject.threads_init()
         self.matriz = Matriz(leds_verticales, leds_horizontales)
+        self.on_leds = Matriz(leds_verticales, leds_horizontales)
         
         for i in range(leds_verticales):
             hbox = gtk.HBox(True)
-            for i in range(leds_horizontales):
-                hbox.pack_start(gtk.CheckButton())
+            for j in range(leds_horizontales):
+                self.on_leds[i, j] = gtk.RadioButton()
+                hbox.pack_start(gtk.RadioButton(self.on_leds[i, j]))
             self.pack_start(hbox)
 
         self.start()
@@ -60,7 +62,10 @@ class MatrizLeds(gtk.VBox):
 
     def update_ui(self):
         for i, j in self.matriz.each_index():
-            self.get_children()[i].get_children()[j].set_active(self.matriz[i, j])
+            if self.matriz[i, j]:
+                self.get_children()[i].get_children()[j].set_active(True)
+            else:
+                self.on_leds[i, j].set_active(True)
 
     def destroy(self):
         if self.funcion.is_alive():
