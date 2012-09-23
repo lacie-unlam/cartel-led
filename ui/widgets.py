@@ -71,8 +71,16 @@ class MatrizLeds(gtk.VBox):
         self.funcion.stop()
 
     def start(self, func=funciones.BHorizontal):
+        self.func = func
         self.funcion = func(self.matriz, lambda: gobject.idle_add(self.update_ui), self.frecuencia)
         self.funcion.start()
+
+    def restart(self, frecuencia=None):
+        self.clear()
+        if frecuencia:
+            self.frecuencia = frecuencia
+        self.start(self.func)
+
 
     def set_func(self, func):
         self.clear()

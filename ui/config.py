@@ -76,13 +76,12 @@ class Config:
             self.matriz_leds.clear()
             widget.set_label(self.ON_OFF_BTN_OFF)
         else:
-            self.matriz_leds.start(self.fase.get_value())
+            self.matriz_leds.restart()
             widget.set_label(self.ON_OFF_BTN_ON)
 
-    def on_fase_value_changed(self, fase):
+    def on_frecuencia_value_changed(self, frecuencia):
         if hasattr(self, 'matriz_leds'):
-            self.matriz_leds.clear()
-            self.matriz_leds.start(fase.get_value())
+            self.matriz_leds.restart(frecuencia.get_value())
 
     def on_func_radio_toggled(self, radio_button, data=None):
         if data == 'func_mate':
