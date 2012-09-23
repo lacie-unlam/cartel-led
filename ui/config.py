@@ -64,11 +64,11 @@ class Config:
         self.window.show()
 
     def on_encender_clicked(self, widget):
-        self.on_off_btn_off()
+        self.on_off_btn.set_label(self.ON_OFF_BTN_OFF)
         self.matriz_leds.set()
 
     def on_limpiar_clicked(self, widget):
-        self.on_off_btn_off()
+        self.on_off_btn.set_label(self.ON_OFF_BTN_OFF)
         self.matriz_leds.clear()
 
     def on_off_btn_clicked_cb(self, widget):
@@ -78,11 +78,6 @@ class Config:
         else:
             self.matriz_leds.start(self.fase.get_value())
             widget.set_label(self.ON_OFF_BTN_ON)
-
-    def on_off_btn_off(self):
-        if self.on_off_btn.get_active():
-            self.on_off_btn.set_active(False)
-            self.on_off_btn.set_label(self.ON_OFF_BTN_OFF)
 
     def on_fase_value_changed(self, fase):
         if hasattr(self, 'matriz_leds'):
@@ -95,3 +90,6 @@ class Config:
                 self.func_config.show()
             else:
                 self.func_config.hide()
+        elif radio_button.get_active():
+            self.matriz_leds.set_func(radio_button.get_label())
+

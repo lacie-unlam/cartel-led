@@ -3,10 +3,11 @@
 import gobject
 import gtk
 import math
+import re
 from threading import Timer
 
 from lib.estructuras import Matriz
-from lib.funciones import Funcion
+from lib import funciones
 
 class ComboFunciones:
     SENO = 'Seno'
@@ -37,10 +38,11 @@ class ComboFunciones:
 class MatrizLeds(gtk.VBox):
     PADDING = 2
 
-    def __init__(self, mods_horizontales, mods_verticales, fase):
+    def __init__(self, mods_horizontales, mods_verticales, frecuencia):
         super(self.__class__, self).__init__(homogeneous=True)
         gobject.threads_init()
-        self.matriz = Matriz(mods_horizontales, mods_verticales)
+        self.frecuencia = frecuencia
+        self.matriz = Matriz(mods_verticales, mods_horizontales)
         
         for i in range(mods_verticales):
             hbox = gtk.HBox(True)
@@ -48,7 +50,7 @@ class MatrizLeds(gtk.VBox):
                 hbox.pack_start(ModuloLeds(), padding=self.PADDING)
             self.pack_start(hbox, padding=self.PADDING)
 
-        self.start(fase)
+        self.start()
 
     def set(self):
         self.destroy()
@@ -68,9 +70,16 @@ class MatrizLeds(gtk.VBox):
     def destroy(self):
         self.funcion.stop()
 
-    def start(self, fase):
-        self.funcion = Funcion(self.matriz, lambda: gobject.idle_add(self.update_ui), fase)
+    def start(self, func=funciones.BHorizontal):
+        self.funcion = func(self.matriz, lambda: gobject.idle_add(self.update_ui), self.frecuencia)
         self.funcion.start()
+
+    def set_func(self, func):
+        self.clear()
+        if re.search(r'horizontal$', func, re.IGNORECASE):
+            self.start()
+        else:
+            self.start(funciones.BVertical)
 
 
 class ModuloLeds(gtk.VBox):
@@ -78,10 +87,7 @@ class ModuloLeds(gtk.VBox):
     CANT_LEDS_X_COL = 4
     PADDING = 1
 
-    INACTIVE = 0
-    PARTIALLY_ACTIVE = 1
-    FULLY_ACTIVE = 2
-
+    PARTIALLY_LIT = 1
 
     def __init__(self):
         super(self.__class__, self).__init__(homogeneous=True)
@@ -93,7 +99,7 @@ class ModuloLeds(gtk.VBox):
             self.pack_start(table, padding=self.PADDING)
 
     def set_active(self, active):
-        if active == self.PARTIALLY_ACTIVE:
+        if active == self.PARTIALLY_LIT:
             for led in self.get_children()[0].get_children():
                 led.set_active(False)
             for led in self.get_children()[1].get_children():

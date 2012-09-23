@@ -4,6 +4,8 @@ from threading import Thread
 from time import sleep
 from pprint import pprint
 
+from lib.estructuras import Matriz
+
 class Funcion(Thread):
 	def __init__(self, matriz, callback, frecuencia):
 		Thread.__init__(self)
@@ -17,11 +19,42 @@ class Funcion(Thread):
 			sleep(self.frecuencia)
 
 	def compute(self):
-		print 'compute..'
+		pass
 
 	def stop(self):
 		self.is_running = False
 		self.join()
+
+
+class BHorizontal(Funcion):
+	def __init__(self, matriz, callback, frecuencia):
+		super(self.__class__, self).__init__(matriz, callback, frecuencia)
+		self.row, self.partially_active = 0, True
+
+	def compute(self):
+		for c in range(self.matriz.columnas):
+			self.matriz[self.row, c] = Matriz.CELL_PARTIALLY_ACTIVE if self.partially_active else Matriz.CELL_FULLY_ACTIVE
+
+		if self.partially_active:
+			for c in range(self.matriz.columnas):
+				self.matriz[self.row-1 if self.row else self.matriz.filas-1, c] = Matriz.CELL_INACTIVE
+		else:
+			self.row = self.row+1 if self.row < self.matriz.filas-1 else 0
+
+		self.partially_active = not self.partially_active
+
+
+class BVertical(Funcion):
+	def __init__(self, matriz, callback, frecuencia):
+		super(self.__class__, self).__init__(matriz, callback, frecuencia)
+		self.col = 0
+
+	def compute(self):
+		for f in range(self.matriz.filas):
+			self.matriz[f, self.col-1 if self.col else self.matriz.columnas-1] = Matriz.CELL_INACTIVE
+			self.matriz[f, self.col] = Matriz.CELL_FULLY_ACTIVE
+
+		self.col = self.col+1 if self.col < self.matriz.columnas-1 else 0
 
 
 # class Cuadrada(Funcion):
