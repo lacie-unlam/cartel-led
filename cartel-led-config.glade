@@ -26,7 +26,7 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkRadioButton" id="bhorizontal">
-                    <property name="label" translatable="yes">Barrido Horizontal</property>
+                    <property name="label" translatable="yes">Barrido horizontal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
