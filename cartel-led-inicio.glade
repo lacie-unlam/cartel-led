@@ -22,14 +22,14 @@
             <child>
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Cant. de LEDs horizontales</property>
+                <property name="label" translatable="yes">Cant. de m&#xF3;dulos horizontales</property>
                 <property name="justify">center</property>
               </object>
             </child>
             <child>
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Cant. de LEDs verticales</property>
+                <property name="label" translatable="yes">Cant. de m&#xF3;dulos verticales</property>
                 <property name="justify">center</property>
               </object>
               <packing>
@@ -42,7 +42,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x25CF;</property>
-                <property name="adjustment">leds_horizontales</property>
+                <property name="adjustment">mods_horizontales</property>
                 <property name="climb_rate">1</property>
                 <property name="numeric">True</property>
               </object>
@@ -56,7 +56,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x25CF;</property>
-                <property name="adjustment">leds_verticales</property>
+                <property name="adjustment">mods_verticales</property>
                 <property name="climb_rate">1</property>
                 <property name="numeric">True</property>
               </object>
@@ -87,17 +87,17 @@
       </object>
     </child>
   </object>
-  <object class="GtkAdjustment" id="leds_horizontales">
-    <property name="value">48</property>
-    <property name="lower">48</property>
-    <property name="upper">80</property>
+  <object class="GtkAdjustment" id="mods_horizontales">
+    <property name="value">1</property>
+    <property name="lower">1</property>
+    <property name="upper">10</property>
     <property name="step_increment">1</property>
-    <property name="page_increment">4</property>
+    <property name="page_increment">2</property>
   </object>
-  <object class="GtkAdjustment" id="leds_verticales">
-    <property name="value">8</property>
-    <property name="lower">8</property>
-    <property name="upper">16</property>
+  <object class="GtkAdjustment" id="mods_verticales">
+    <property name="value">1</property>
+    <property name="lower">1</property>
+    <property name="upper">5</property>
     <property name="step_increment">1</property>
     <property name="page_increment">2</property>
   </object>

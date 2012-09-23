@@ -6,8 +6,8 @@ import os
 from config import Config
 
 class App:
-    LEDS_HORIZONTALES = 48
-    LEDS_VERTICALES = 8
+    MODS_HORIZONTALES = 4
+    MODS_VERTICALES = 3
 
     def __init__(self):
         self.build_ui_from_xml()
@@ -19,16 +19,16 @@ class App:
         return False
 
     def build_ui_from_xml(self):
-        self.builder = gtk.Builder()
-        self.builder.add_from_file(os.path.abspath('cartel-led-inicio.glade'))
-        self.leds_horizontales = self.builder.get_object('leds_horizontales')
-        self.leds_verticales = self.builder.get_object('leds_verticales')
-        self.builder.connect_signals(self)
+        builder = gtk.Builder()
+        builder.add_from_file(os.path.abspath('cartel-led-inicio.glade'))
+        self.mods_horizontales = builder.get_object('mods_horizontales')
+        self.mods_verticales = builder.get_object('mods_verticales')
+        builder.connect_signals(self)
 
     def set_default_values(self):
-        self.leds_horizontales.set_value(self.LEDS_HORIZONTALES)
-        self.leds_verticales.set_value(self.LEDS_VERTICALES)
+        self.mods_horizontales.set_value(self.MODS_HORIZONTALES)
+        self.mods_verticales.set_value(self.MODS_VERTICALES)
 
     def on_crear_cartel_clicked(self, widget):
-        config = Config(self.leds_horizontales.get_value(), self.leds_verticales.get_value())
+        config = Config(self.mods_horizontales.get_value(), self.mods_verticales.get_value())
         config.show()

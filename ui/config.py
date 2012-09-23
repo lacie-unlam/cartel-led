@@ -11,35 +11,57 @@ class Config:
     ON_OFF_BTN_ON = 'Parar'
     ON_OFF_BTN_OFF = 'Continuar'
 
-    def __init__(self, leds_horizontales, leds_verticales): 
-        self.leds_horizontales, self.leds_verticales = int(leds_horizontales), int(leds_verticales)
-        self.build_ui_from_xml()
-        self.matriz_leds = MatrizLeds(self.leds_horizontales, self.leds_verticales, self.FASE)
-        self.container.pack_start(self.matriz_leds)
-        self.container.reorder_child(self.matriz_leds, 0)
+    def __init__(self, mods_horizontales, mods_verticales): 
+        self.build_glade_ui()
+        self.init_matriz_leds(int(mods_horizontales), int(mods_verticales))
 
     def on_window_delete_event(self, widget, data=None):
         self.matriz_leds.clear()
         return False
 
-    def build_ui_from_xml(self):
-        self.builder = gtk.Builder()
-        self.builder.add_from_file(os.path.abspath('cartel-led-config.glade'))
-        self.builder.connect_signals(self)
-        self.window = self.builder.get_object('window')
-        self.container = self.builder.get_object('container')
-        self.combo_func = ComboFunciones()
-        combobox = self.combo_func.get_widget()
-        tabla = self.builder.get_object('tabla')
-        tabla.attach(combobox, 1, 2, 0, 1, gtk.FILL, gtk.FILL)
-        self.frecuencia = self.builder.get_object('frecuencia')
-        self.frecuencia.set_value(self.FRECUENCIA)
-        self.fase = self.builder.get_object('fase')
-        self.fase.set_value(self.FASE)
-        self.on_off_btn = self.builder.get_object('on_off_btn')
+    def build_glade_ui(self):
+        builder = gtk.Builder()
+        builder.add_from_file(os.path.abspath('cartel-led-config.glade'))
+        builder.connect_signals(self)
+
+        self.fetch_widgets_from_xml(builder)
+
+        # self.combo_func = ComboFunciones()
+        # combobox = self.combo_func.get_widget()
+        # tabla = builder.get_object('tabla')
+        # tabla.attach(combobox, 1, 2, 0, 1, gtk.FILL, gtk.FILL)
+
+        self.init_frecuencia(builder.get_object('frecuencia'))
+        self.init_fase(builder.get_object('fase'))
+        self.init_func_radios(builder)
+
+    def fetch_widgets_from_xml(self, gtk_builder):
+        self.window = gtk_builder.get_object('window')
+        self.container = gtk_builder.get_object('container')
+        self.on_off_btn = gtk_builder.get_object('on_off_btn')
+        self.func_config = gtk_builder.get_object('func_config')
+
+    def init_frecuencia(self, frecuencia):
+        frecuencia.set_value(self.FRECUENCIA)
+        self.frecuencia = frecuencia
+
+    def init_fase(self, fase):
+        fase.set_value(self.FASE)
+        self.fase = fase
+
+    def init_func_radios(self, gtk_builder):
+        for rbutton in ['bhorizontal', 'bvertical', 'func_mate']:
+            radio_button = gtk_builder.get_object(rbutton)
+            radio_button.connect("toggled", self.on_func_radio_toggled, rbutton)
+
+    def init_matriz_leds(self, mods_horizontales, mods_verticales):
+        self.matriz_leds = MatrizLeds(mods_horizontales, mods_verticales, self.FASE)
+        self.container.pack_start(self.matriz_leds)
+        self.container.reorder_child(self.matriz_leds, 0)
+        self.matriz_leds.show_all()
 
     def show(self):
-        self.window.show_all()
+        self.window.show()
 
     def on_encender_clicked(self, widget):
         self.on_off_btn_off()
@@ -63,5 +85,13 @@ class Config:
             self.on_off_btn.set_label(self.ON_OFF_BTN_OFF)
 
     def on_fase_value_changed(self, fase):
-        self.matriz_leds.clear()
-        self.matriz_leds.start(fase.get_value())
+        if hasattr(self, 'matriz_leds'):
+            self.matriz_leds.clear()
+            self.matriz_leds.start(fase.get_value())
+
+    def on_func_radio_toggled(self, radio_button, data=None):
+        if data == 'func_mate':
+            if radio_button.get_active():
+                self.func_config.show()
+            else:
+                self.func_config.hide()

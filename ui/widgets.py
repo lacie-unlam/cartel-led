@@ -6,7 +6,7 @@ import math
 from threading import Timer
 
 from lib.estructuras import Matriz
-from lib.funciones import Cuadrada
+from lib.funciones import Funcion
 
 class ComboFunciones:
     SENO = 'Seno'
@@ -35,16 +35,18 @@ class ComboFunciones:
 
 
 class MatrizLeds(gtk.VBox):
-    def __init__(self, leds_horizontales, leds_verticales, fase):
-        super(self.__class__, self).__init__(True)
+    PADDING = 2
+
+    def __init__(self, mods_horizontales, mods_verticales, fase):
+        super(self.__class__, self).__init__(homogeneous=True)
         gobject.threads_init()
-        self.matriz = Matriz(leds_verticales, leds_horizontales)
+        self.matriz = Matriz(mods_horizontales, mods_verticales)
         
-        for i in range(leds_verticales):
+        for i in range(mods_verticales):
             hbox = gtk.HBox(True)
-            for j in range(leds_horizontales):
-                hbox.pack_start(self.new_led(), padding=2)
-            self.pack_start(hbox)
+            for j in range(mods_horizontales):
+                hbox.pack_start(ModuloLeds(), padding=self.PADDING)
+            self.pack_start(hbox, padding=self.PADDING)
 
         self.start(fase)
 
@@ -64,20 +66,42 @@ class MatrizLeds(gtk.VBox):
             self.get_children()[i].get_children()[j].set_active(self.matriz[i, j])
 
     def destroy(self):
-        if self.funcion.is_alive():
-            self.funcion.stop()
+        self.funcion.stop()
 
     def start(self, fase):
-        self.funcion = Cuadrada(self.matriz, lambda: gobject.idle_add(self.update_ui), fase)
+        self.funcion = Funcion(self.matriz, lambda: gobject.idle_add(self.update_ui), fase)
         self.funcion.start()
 
-    def new_led(self):
-        led = LED(self)
-        led.set_color('off', [1,0,0]) # red
-        led.set_color('on', [124,252,0]) # green
-        led.set_dia(5)
-        return led
 
+class ModuloLeds(gtk.VBox):
+    CANT_LEDS_X_FILA = 8
+    CANT_LEDS_X_COL = 4
+    PADDING = 1
+
+    INACTIVE = 0
+    PARTIALLY_ACTIVE = 1
+    FULLY_ACTIVE = 2
+
+
+    def __init__(self):
+        super(self.__class__, self).__init__(homogeneous=True)
+        for b in range(self.CANT_LEDS_X_COL/2):
+            table = gtk.Table(self.CANT_LEDS_X_COL/2, self.CANT_LEDS_X_FILA, homogeneous=True)
+            for i in range(self.CANT_LEDS_X_COL/2):
+                for j in range(self.CANT_LEDS_X_FILA):
+                    table.attach(LED.new(self), j, j+1, i, i+1, xpadding=1, ypadding=1)
+            self.pack_start(table, padding=self.PADDING)
+
+    def set_active(self, active):
+        if active == self.PARTIALLY_ACTIVE:
+            for led in self.get_children()[0].get_children():
+                led.set_active(False)
+            for led in self.get_children()[1].get_children():
+                led.set_active(True)
+        else:
+            for table in self.get_children():
+                for led in table.get_children():
+                    led.set_active(active)
 
 # This creates the custom LED widget
 class LED(gtk.DrawingArea):
@@ -137,3 +161,11 @@ class LED(gtk.DrawingArea):
     def set_dia(self, dia):
         self._dia = dia
         self.queue_draw()
+
+    @classmethod
+    def new(cls, parent):
+        led = cls(parent)
+        led.set_color('off', [1,0,0]) # red
+        led.set_color('on', [124,252,0]) # green
+        led.set_dia(5)
+        return led
