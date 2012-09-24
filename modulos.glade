@@ -73,12 +73,32 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="crear_cartel">
-            <property name="label" translatable="yes">Crear cartel</property>
+          <object class="GtkHBox" id="hbox1">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <signal name="clicked" handler="on_crear_cartel_clicked"/>
+            <child>
+              <object class="GtkButton" id="crear_cartel">
+                <property name="label" translatable="yes">Crear cartel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_crear_cartel_clicked"/>
+              </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="configuracion">
+                <property name="label" translatable="yes">Configuraci&#xF3;n</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_configuracion_clicked"/>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="position">1</property>

@@ -3,15 +3,17 @@
 import gtk
 import os
 
-from config import Config
+import funcion
+import config
 
-class App:
+class Window:
     MODS_HORIZONTALES = 4
     MODS_VERTICALES = 3
 
     def __init__(self):
         self.build_ui_from_xml()
         self.set_default_values()
+        self.window.show_all()
         gtk.main()
 
     def on_window_delete_event(self, widget, data=None):
@@ -20,9 +22,10 @@ class App:
 
     def build_ui_from_xml(self):
         builder = gtk.Builder()
-        builder.add_from_file(os.path.abspath('cartel-led-inicio.glade'))
+        builder.add_from_file(os.path.abspath('modulos.glade'))
         self.mods_horizontales = builder.get_object('mods_horizontales')
         self.mods_verticales = builder.get_object('mods_verticales')
+        self.window = builder.get_object('window')
         builder.connect_signals(self)
 
     def set_default_values(self):
@@ -30,5 +33,7 @@ class App:
         self.mods_verticales.set_value(self.MODS_VERTICALES)
 
     def on_crear_cartel_clicked(self, widget):
-        config = Config(self.mods_horizontales.get_value(), self.mods_verticales.get_value())
-        config.show()
+        funcion.Window(self.mods_horizontales.get_value(), self.mods_verticales.get_value())
+
+    def on_configuracion_clicked(self, widget):
+        config.Window()

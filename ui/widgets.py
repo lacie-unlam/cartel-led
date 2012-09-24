@@ -116,16 +116,17 @@ class ModuloLeds(gtk.VBox):
             for table in self.get_children():
                 for led in table.get_children():
                     led.set_active(active)
+                    
 
 # This creates the custom LED widget
 class LED(gtk.DrawingArea):
     def __init__(self, parent):
         self.par = parent       
         super(LED, self).__init__() 
-        self._dia = 10
+        self._dia = 5
         self._state = 0
-        self._on_color = [0.3, 0.4, 0.6]
-        self._off_color = [0.9, 0.1, 0.1]
+        self._on_color = [124, 252, 0] # red
+        self._off_color = [1, 0, 0] # green
         # self.set_size_request(25, 25)
         self.connect("expose-event", self.expose)
         
@@ -179,7 +180,7 @@ class LED(gtk.DrawingArea):
     @classmethod
     def new(cls, parent):
         led = cls(parent)
-        led.set_color('off', [1,0,0]) # red
-        led.set_color('on', [124,252,0]) # green
-        led.set_dia(5)
+        # led.set_color('off', [1,0,0]) # red
+        # led.set_color('on', [124,252,0]) # green
+        # led.set_dia(5)
         return led

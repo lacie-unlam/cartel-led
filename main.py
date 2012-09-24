@@ -2,7 +2,7 @@
 
 # -*- coding: UTF-8 -*-
 
-from ui.app import App
+from ui import modulos
 
 if __name__ == '__main__':
-    App()
+    modulos.Window()
