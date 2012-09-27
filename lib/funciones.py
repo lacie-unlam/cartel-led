@@ -29,19 +29,21 @@ class Funcion(Thread):
 class BHorizontal(Funcion):
 	def __init__(self, matriz, callback, frecuencia):
 		super(self.__class__, self).__init__(matriz, callback, frecuencia)
-		self.row, self.partially_active = 0, True
+		self.row = 0
 
 	def compute(self):
+		prev_row = self.previous_row()
 		for c in range(self.matriz.columnas):
-			self.matriz[self.row, c] = Matriz.CELL_PARTIALLY_ACTIVE if self.partially_active else Matriz.CELL_FULLY_ACTIVE
+			self.matriz[prev_row, c] = False
+			self.matriz[self.row, c] = True
 
-		if self.partially_active:
-			for c in range(self.matriz.columnas):
-				self.matriz[self.row-1 if self.row else self.matriz.filas-1, c] = Matriz.CELL_INACTIVE
-		else:
-			self.row = self.row+1 if self.row < self.matriz.filas-1 else 0
+		self.inc_row()
 
-		self.partially_active = not self.partially_active
+	def previous_row(self):
+		return self.row-1 if self.row else self.matriz.filas-1
+
+	def inc_row(self):
+		self.row = self.row+1 if self.row < self.matriz.filas-1 else 0
 
 
 class BVertical(Funcion):
@@ -50,10 +52,17 @@ class BVertical(Funcion):
 		self.col = 0
 
 	def compute(self):
+		prev_col = self.previous_col()
 		for f in range(self.matriz.filas):
-			self.matriz[f, self.col-1 if self.col else self.matriz.columnas-1] = Matriz.CELL_INACTIVE
-			self.matriz[f, self.col] = Matriz.CELL_FULLY_ACTIVE
+			self.matriz[f, prev_col] = False
+			self.matriz[f, self.col] = True
 
+		self.inc_col()
+
+	def previous_col(self):
+		return self.col-1 if self.col else self.matriz.columnas-1
+
+	def inc_col(self):
 		self.col = self.col+1 if self.col < self.matriz.columnas-1 else 0
 
 

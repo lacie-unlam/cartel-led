@@ -41,8 +41,9 @@ class MatrizLeds(gtk.VBox):
     def __init__(self, mods_horizontales, mods_verticales, frecuencia):
         super(self.__class__, self).__init__(homogeneous=True)
         gobject.threads_init()
+        self.mods_horizontales, self.mods_verticales = mods_horizontales, mods_verticales
         self.frecuencia = frecuencia
-        self.matriz = Matriz(mods_verticales, mods_horizontales)
+        self.matriz = Matriz(mods_verticales*ModuloLeds.CANT_LEDS_X_COL, mods_horizontales*ModuloLeds.CANT_LEDS_X_FILA)
         
         for i in range(mods_verticales):
             hbox = gtk.HBox(True)
@@ -64,8 +65,11 @@ class MatrizLeds(gtk.VBox):
         self.update_ui()
 
     def update_ui(self):
-        for i, j in self.matriz.each_index():
-            self.get_children()[i].get_children()[j].set_active(self.matriz[i, j])
+        for v in range(self.mods_verticales):
+            for f in range(ModuloLeds.CANT_LEDS_X_COL):
+                for h in range(self.mods_horizontales):
+                    for c in range(ModuloLeds.CANT_LEDS_X_FILA):
+                        self.get_children()[v].get_children()[h][f, c] = self.matriz[f+v*ModuloLeds.CANT_LEDS_X_COL, c+h*ModuloLeds.CANT_LEDS_X_FILA]
 
     def destroy(self):
         self.funcion.stop()
@@ -90,33 +94,24 @@ class MatrizLeds(gtk.VBox):
             self.start(funciones.BVertical)
 
 
-class ModuloLeds(gtk.VBox):
+class ModuloLeds(gtk.Table):
     CANT_LEDS_X_FILA = 8
     CANT_LEDS_X_COL = 4
     PADDING = 1
 
-    PARTIALLY_LIT = 1
-
     def __init__(self):
-        super(self.__class__, self).__init__(homogeneous=True)
-        for b in range(self.CANT_LEDS_X_COL/2):
-            table = gtk.Table(self.CANT_LEDS_X_COL/2, self.CANT_LEDS_X_FILA, homogeneous=True)
-            for i in range(self.CANT_LEDS_X_COL/2):
-                for j in range(self.CANT_LEDS_X_FILA):
-                    table.attach(LED.new(self), j, j+1, i, i+1, xpadding=1, ypadding=1)
-            self.pack_start(table, padding=self.PADDING)
+        super(self.__class__, self).__init__(self.CANT_LEDS_X_COL, self.CANT_LEDS_X_FILA, homogeneous=True)
+        self.matriz = Matriz(self.CANT_LEDS_X_COL, self.CANT_LEDS_X_FILA)
+        for i in range(self.CANT_LEDS_X_COL):
+            for j in range(self.CANT_LEDS_X_FILA):
+                led = LED(self)
+                self.matriz[i, j] = led
+                self.attach(led, j, j+1, i, i+1, xpadding=self.PADDING, ypadding=self.PADDING)
 
-    def set_active(self, active):
-        if active == self.PARTIALLY_LIT:
-            for led in self.get_children()[0].get_children():
-                led.set_active(False)
-            for led in self.get_children()[1].get_children():
-                led.set_active(True)
-        else:
-            for table in self.get_children():
-                for led in table.get_children():
-                    led.set_active(active)
-                    
+    def __setitem__(self, position, value):
+        i, j = position
+        self.matriz[i, j].set_active(value)
+
 
 # This creates the custom LED widget
 class LED(gtk.DrawingArea):
@@ -127,7 +122,6 @@ class LED(gtk.DrawingArea):
         self._state = 0
         self._on_color = [124, 252, 0] # red
         self._off_color = [1, 0, 0] # green
-        # self.set_size_request(25, 25)
         self.connect("expose-event", self.expose)
         
     # This method draws our widget
@@ -176,11 +170,3 @@ class LED(gtk.DrawingArea):
     def set_dia(self, dia):
         self._dia = dia
         self.queue_draw()
-
-    @classmethod
-    def new(cls, parent):
-        led = cls(parent)
-        # led.set_color('off', [1,0,0]) # red
-        # led.set_color('on', [124,252,0]) # green
-        # led.set_dia(5)
-        return led
