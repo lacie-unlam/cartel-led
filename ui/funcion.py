@@ -6,7 +6,7 @@ import os
 from widgets import ComboFunciones, MatrizLeds
 
 class Window:
-    FRECUENCIA = 1.0
+    FRECUENCIA = 2
     FASE = 1.0
     ON_OFF_BTN_ON = 'Parar'
     ON_OFF_BTN_OFF = 'Continuar'

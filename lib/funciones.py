@@ -4,17 +4,20 @@ from threading import Thread
 from time import sleep
 from pprint import pprint
 
-from lib.estructuras import Matriz
+from comm import Serializer
+from estructuras import Matriz
 
 class Funcion(Thread):
 	def __init__(self, matriz, callback, frecuencia):
 		Thread.__init__(self)
 		self.matriz, self.callback, self.frecuencia = matriz, callback, frecuencia
+		self.serializer = Serializer(matriz)
 		self.is_running = True
 
 	def run(self):
 		while self.is_running:
 			self.compute()
+			self.serializer.write()
 			self.callback()
 			sleep(self.frecuencia)
 

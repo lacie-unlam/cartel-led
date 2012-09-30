@@ -1,4 +1,4 @@
-# from pprint import pprint
+from types import IntType
 
 class Matriz:
     def __init__(self, filas, columnas):
@@ -29,10 +29,12 @@ class Matriz:
         self.data[i][j] = value
 
     def __getitem__(self, position):
-        i, j = position
-        return self.data[i][j]
+        if(type(position) == IntType):
+            return self.data[position]
+        else:
+            i, j = position
+            return self.data[i][j]
 
     def __reset__(self, value):
         for i, j in self.each_index():
             self[i, j] = value
-        # pprint(self.data)

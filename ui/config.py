@@ -5,7 +5,7 @@ import re
 from os import path
 
 import modulos
-from lib import comm
+from lib.comm import Serializer
 
 class Window:
     def __init__(self):
@@ -25,7 +25,7 @@ class Window:
         builder.connect_signals(self)
 
     def set_default_device(self):
-        device = comm.device
+        device = Serializer.device
         if is_default_tty(device):
             for option in self.options:
                 if(option.get_label() == device):
@@ -50,7 +50,7 @@ class Window:
             device = self.device.get_text()
 
         if(path.exists(device)):
-            comm.device = device
+            Serializer.device = device
             self.window.destroy()
         else:
             err_dialog = gtk.MessageDialog(parent=self.window, flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT, 
