@@ -1,15 +1,22 @@
 import serial
 import time
+import logging
+import os
 
+import lib.logger
 from iter import in_groups
 from lib.estructuras import Matriz
+from lib import null
 
 class Serializer:
     device = '/dev/ttyUSB0'
     
     def __init__(self, matriz):
         self.matriz = matriz
-        self.ser = serial.Serial(self.device, baudrate=19200)
+        if os.path.exists(self.device):
+            self.ser = serial.Serial(self.device, baudrate=19200)
+        else:
+            self.ser = null.Null()
 
     def write(self):
         from ui.widgets import ModuloLeds
@@ -32,16 +39,16 @@ class Serializer:
                 self.write_bytes(bytes, reg)
         
             self.ser.write("zs\r")
-            print 'zs'
+            logging.info('zs')
             time.sleep(0.01)
         self.ser.write('zm\r')
-        print 'zm'
+        logging.info('zm')
 
     def write_bytes(self, bytes, r):
         for bits in reversed(bytes):
             hexa = ''.join(map(lambda x: '1' if x else '0', bits))
             data = hex(int(hexa, 2))[2:]
-            print 'z%s: %s' % (r, data.rjust(4, '0'))
+            logging.info('z%s: %s', r, data.rjust(4, '0'))
             self.ser.write('z%s%s\r' % (r, data.rjust(4, '0')))
 
     def __del__(self):
