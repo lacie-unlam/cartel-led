@@ -7,7 +7,7 @@ import funcion
 import config
 
 class Window:
-    MODS_HORIZONTALES = 4
+    MODS_HORIZONTALES = 7
     MODS_VERTICALES = 3
 
     def __init__(self):
