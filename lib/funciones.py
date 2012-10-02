@@ -69,6 +69,52 @@ class BVertical(Funcion):
 		self.col = self.col+1 if self.col < self.matriz.columnas-1 else 0
 
 
+class Demo(Funcion):
+	def __init__(self, matriz, callback, frecuencia):
+		super(self.__class__, self).__init__(matriz, callback, frecuencia)
+		self.row, self.col, self.mode = 0, 0, 'h'
+
+	def compute(self):
+		if self.mode == 'h':
+			if not self.col:
+				prev_col = self.previous_col()
+				for f in range(self.matriz.filas):
+					self.matriz[f, prev_col] = False
+			prev_row = self.previous_row()
+			for c in range(self.matriz.columnas):
+				self.matriz[prev_row, c] = False
+				self.matriz[self.row, c] = True
+			self.inc_row()
+			if not self.row:
+				self.mode = 'v'
+		else:
+			if not self.row:
+				prev_row = self.previous_row()
+				for c in range(self.matriz.columnas):
+					self.matriz[prev_row, c] = False
+			prev_col = self.previous_col()
+			for f in range(self.matriz.filas):
+				self.matriz[f, prev_col] = False
+				self.matriz[f, self.col] = True
+			self.inc_col()
+			if not self.col:
+				self.mode = 'h'
+
+	def previous_row(self):
+		return self.row-1 if self.row else self.matriz.filas-1
+
+	def inc_row(self):
+		self.row = self.row+1 if self.row < self.matriz.filas-1 else 0
+
+	def previous_col(self):
+		return self.col-1 if self.col else self.matriz.columnas-1
+
+	def inc_col(self):
+		self.col = self.col+1 if self.col < self.matriz.columnas-1 else 0
+		if not self.col:
+			self.mode = 'h'
+
+
 # class Cuadrada(Funcion):
 # 	def __init__(self, matriz, callback, fase):
 # 		super(self.__class__, self).__init__(matriz, callback, fase)

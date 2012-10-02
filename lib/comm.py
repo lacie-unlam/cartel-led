@@ -8,7 +8,7 @@ from lib.estructuras import Matriz
 from lib import null
 
 class Serializer:
-    device = '/dev/ttyS0'
+    device = '/dev/ttyUSB0'
     
     def __init__(self, matriz):
         self.matriz = matriz
@@ -23,7 +23,6 @@ class Serializer:
         for m in range(self.matriz.columnas/ModuloLeds.CANT_LEDS_X_FILA):
             cols = ModuloLeds.CANT_LEDS_X_COL/2
             for c in range(cols-1, -1, -1):
-            # for c in range(cols):
                 for r in range(self.matriz.filas/ModuloLeds.CANT_LEDS_X_COL):
                     reg = chr(ord('g') + r)
                     bytes = [self.matriz[i+2*c+ModuloLeds.CANT_LEDS_X_COL*r, j+ModuloLeds.CANT_LEDS_X_FILA*m] 

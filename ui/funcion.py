@@ -51,7 +51,7 @@ class Window:
         self.fase = fase
 
     def init_func_radios(self, gtk_builder):
-        for rbutton in ['bhorizontal', 'bvertical', 'func_mate']:
+        for rbutton in ['bhorizontal', 'bvertical', 'demo']:
             radio_button = gtk_builder.get_object(rbutton)
             radio_button.connect("toggled", self.on_func_radio_toggled, rbutton)
 

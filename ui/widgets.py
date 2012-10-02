@@ -89,9 +89,12 @@ class MatrizLeds(gtk.VBox):
     def set_func(self, func):
         self.clear()
         if re.search(r'horizontal$', func, re.IGNORECASE):
-            self.start()
+            funcion = funciones.BHorizontal
+        elif re.search(r'vertical$', func, re.IGNORECASE):
+            funcion = funciones.BVertical
         else:
-            self.start(funciones.BVertical)
+            funcion = funciones.Demo
+        self.start(funcion)
 
 
 class ModuloLeds(gtk.Table):

@@ -52,8 +52,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="func_mate">
-                    <property name="label" translatable="yes">Funci&#xF3;n matem&#xE1;tica</property>
+                  <object class="GtkRadioButton" id="demo">
+                    <property name="label" translatable="yes">Modo demo</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
