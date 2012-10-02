@@ -7,30 +7,31 @@ import time
 ser = serial.Serial('/dev/ttyS0', baudrate=19200)
 
 PARPADEOS = 5
-MODULOS = 8
+MODULOS = 7
+ZS_TIME = 0.01
+OFF_TIME = 0.1
+ON_TIME = 0.05
 
-for i in ['FFFF', 'AA55', '55AA', 'F0F0', 'OF0F', 'FF00', '00FF']:
-    for j in PARPADEOS:
-        for n in range(MODULOS):
+for i in ['FFFF', '00FF', 'AA55', '55AA', 'F0F0', 'FF00']:
+    for j in range(PARPADEOS):
+        for n in range(MODULOS*2):
             ser.write("zg0000\r")
             ser.write("zh0000\r")
             ser.write("zi0000\r")
-            ser.write("zj0000\r")
+            # ser.write("zj0000\r")
             ser.write("zs\r")
-            time.sleep(0.01)
+            time.sleep(ZS_TIME)
         ser.write("zm\r")
+        time.sleep(OFF_TIME)
 
-        time.sleep(0.25)
-
-        for n in range(MODULOS):
-            ser.write("zg%s\r" % i)
-            ser.write("zh%s\r" % i)
+        for n in range(MODULOS*2):
+            ser.write("zg%s\r" % i.rjust(4, '0'))
+            ser.write("zh%s\r" % i.rjust(4, '0'))
             ser.write("zi%s\r" % i)
-            ser.write("zj%s\r" % i)
+            # ser.write("zj%s\r" % i)
             ser.write("zs\r")
-            time.sleep(0.01)
+            time.sleep(ZS_TIME)
         ser.write("zm\r")
-
-        time.sleep(0.5)
+        time.sleep(ON_TIME)
 
 ser.close()
