@@ -96,3 +96,6 @@ SYMBOLS = {
     "->": [0x08, 0x08, 0x2A, 0x1C, 0x08], # ->
     "<-": [0x08, 0x1C, 0x2A, 0x08, 0x08] # <-
 }
+
+def font(symbol):
+    return map(lambda n:  hex(n)[2:].rjust(2, '0'),SYMBOLS[symbol])

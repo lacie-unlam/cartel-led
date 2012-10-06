@@ -6,6 +6,7 @@ from pprint import pprint
 
 from comm import Serializer
 from estructuras import Matriz
+from fonts import font
 
 class Funcion(Thread):
 	def __init__(self, matriz, callback, frecuencia):
@@ -69,6 +70,43 @@ class BVertical(Funcion):
 		self.col = self.col+1 if self.col < self.matriz.columnas-1 else 0
 
 
+class Texto(Funcion):
+	def __init__(self, matriz, callback, frecuencia, texto):
+		super(self.__class__, self).__init__(matriz, callback, frecuencia)
+		self.texto = texto
+		self.reset_indexes()
+
+	def compute(self):
+		for i, l in enumerate(list(self.texto[self.i:self.j])):
+			m = self.letter2matrix(l)
+			for f in range(m.filas):
+				for c in range(m.columnas):
+					self.matriz[2+f, (m.columnas)*i+c] = m[f, c]
+		self.i += 1
+		self.j += 1
+		if self.j > len(self.texto):
+			self.reset_indexes()
+
+	def letter2matrix(self, letter):
+		arr = font(letter) # ['7e', '11', '11', '11', '7e']
+		m = Matriz(len(arr[0]*4), len(arr))
+		for i, n in enumerate(arr):
+			s = ''.join(map(lambda x: bin(int(x, 16))[2:].rjust(4, '0'), list(n)))
+			bits = map(lambda x: int(x), list(s))
+			for j in range(m.filas):
+				m[j, i] = True if bits[j] else False
+		# flip it 180º
+		for i in range(m.filas/2):
+			for j in range(len(m[i])):
+				aux = m[i, j]
+				m[i, j] = m[m.filas-i-1, j]
+				m[m.filas-i-1, j] = aux
+		return m
+
+	def reset_indexes(self):
+		self.i, self.j = 0, 11
+
+
 class Demo(Funcion):
 	def __init__(self, matriz, callback, frecuencia):
 		super(self.__class__, self).__init__(matriz, callback, frecuencia)
@@ -113,49 +151,3 @@ class Demo(Funcion):
 		self.col = self.col+1 if self.col < self.matriz.columnas-1 else 0
 		if not self.col:
 			self.mode = 'h'
-
-
-# class Cuadrada(Funcion):
-# 	def __init__(self, matriz, callback, fase):
-# 		super(self.__class__, self).__init__(matriz, callback, fase)
-# 		self.fila, self.columna = 0, 0
-
-# 	def execute(self):
-# 		self.matriz[self.pos_anterior()] = False
-# 		self.matriz[self.fila, self.columna] = True
-# 		self.matriz.changed()
-# 		# pprint(self.matriz.data)
-# 		self.callback()
-# 		self.pos_siguiente()
-# 		sleep(self.fase)
-
-# 	def columna_anterior(self):
-# 		return (self.columna if self.columna else self.matriz.columnas)-1
-
-# 	def fila_anterior(self):
-# 		if self.columna:
-# 			return self.fila
-# 		elif self.fila:
-# 			return self.fila-1
-# 		else:
-# 			return self.matriz.filas-1
-
-# 	def pos_anterior(self):
-# 		return self.fila_anterior(), self.columna_anterior()
-
-# 	def columna_sig(self):
-# 		self.columna += 1
-# 		if self.columna == self.matriz.columnas:
-# 			self.columna = 0
-# 		return self.columna
-
-# 	def fila_sig(self):
-# 		self.fila += 1
-# 		if self.fila == self.matriz.filas:
-# 			self.fila = 0
-# 		return self.fila
-
-# 	def pos_siguiente(self):
-# 		if not self.columna_sig():
-# 			self.fila_sig()
-# 		return self.fila, self.columna

@@ -77,27 +77,32 @@ class MatrizLeds(gtk.VBox):
     def destroy(self):
         self.funcion.stop()
 
-    def start(self, func=funciones.BHorizontal):
-        self.func = func
-        self.funcion = func(self.matriz, lambda: gobject.idle_add(self.update_ui), self.frecuencia)
+    def start(self, func=funciones.BHorizontal, data=None):
+        self.func = [func, data]
+        params = [self.matriz, lambda: gobject.idle_add(self.update_ui), self.frecuencia, data]
+        self.funcion = func(*filter(None, params))
         self.funcion.start()
 
-    def restart(self, frecuencia=None):
+    def restart(self, **kwargs):
         self.clear()
-        if frecuencia:
-            self.frecuencia = frecuencia
-        self.start(self.func)
+        if kwargs.has_key('frecuencia'):
+            self.frecuencia = kwargs['frecuencia']
+        if kwargs.has_key('data'):
+            self.func[1] = kwargs['data']
+        self.start(*self.func)
 
 
-    def set_func(self, func):
+    def set_func(self, func, data=None):
         self.clear()
         if re.search(r'horizontal$', func, re.IGNORECASE):
             funcion = funciones.BHorizontal
         elif re.search(r'vertical$', func, re.IGNORECASE):
             funcion = funciones.BVertical
-        else:
+        elif re.search(r'demo$', func, re.IGNORECASE):
             funcion = funciones.Demo
-        self.start(funcion)
+        else:
+            funcion = funciones.Texto
+        self.start(funcion, data)
         
     def serialize(self):
         Serializer(self.matriz).write()

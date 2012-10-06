@@ -6,8 +6,7 @@ import os
 from widgets import ComboFunciones, MatrizLeds
 
 class Window:
-    FRECUENCIA = 0.5
-    FASE = 1.0
+    FRECUENCIA = 0.3
     ON_OFF_BTN_ON = 'Parar'
     ON_OFF_BTN_OFF = 'Continuar'
 
@@ -27,36 +26,26 @@ class Window:
 
         self.fetch_widgets_from_xml(builder)
 
-        # self.combo_func = ComboFunciones()
-        # combobox = self.combo_func.get_widget()
-        # tabla = builder.get_object('tabla')
-        # tabla.attach(combobox, 1, 2, 0, 1, gtk.FILL, gtk.FILL)
-
         self.init_frecuencia(builder.get_object('frecuencia'))
-        self.init_fase(builder.get_object('fase'))
         self.init_func_radios(builder)
 
     def fetch_widgets_from_xml(self, gtk_builder):
         self.window = gtk_builder.get_object('window')
         self.container = gtk_builder.get_object('container')
         self.on_off_btn = gtk_builder.get_object('on_off_btn')
-        self.func_config = gtk_builder.get_object('func_config')
+        self.txt = gtk_builder.get_object('txt')
 
     def init_frecuencia(self, frecuencia):
         frecuencia.set_value(self.FRECUENCIA)
         self.frecuencia = frecuencia
 
-    def init_fase(self, fase):
-        fase.set_value(self.FASE)
-        self.fase = fase
-
     def init_func_radios(self, gtk_builder):
-        for rbutton in ['bhorizontal', 'bvertical', 'demo']:
+        for rbutton in ['bhorizontal', 'bvertical', 'demo', 'texto']:
             radio_button = gtk_builder.get_object(rbutton)
             radio_button.connect("toggled", self.on_func_radio_toggled, rbutton)
 
     def init_matriz_leds(self, mods_horizontales, mods_verticales):
-        self.matriz_leds = MatrizLeds(mods_horizontales, mods_verticales, self.FASE)
+        self.matriz_leds = MatrizLeds(mods_horizontales, mods_verticales, self.get_frecuencia())
         self.container.pack_start(self.matriz_leds)
         self.container.reorder_child(self.matriz_leds, 0)
         self.matriz_leds.show_all()
@@ -79,14 +68,25 @@ class Window:
 
     def on_frecuencia_value_changed(self, frecuencia):
         if hasattr(self, 'matriz_leds'):
-            self.matriz_leds.restart(frecuencia.get_value())
+            self.matriz_leds.restart(frecuencia=frecuencia.get_value())
 
     def on_func_radio_toggled(self, radio_button, data=None):
-        if data == 'func_mate':
+        d = None
+        if data == 'texto':
+            d = self.get_text()
             if radio_button.get_active():
-                self.func_config.show()
+                self.txt.show()
             else:
-                self.func_config.hide()
-        elif radio_button.get_active():
-            self.matriz_leds.set_func(radio_button.get_label())
+                self.txt.hide()
+        if radio_button.get_active():
+            self.matriz_leds.set_func(radio_button.get_label(), d)
 
+    def on_txt_changed(self, widget):
+        if(widget.get_visible()):
+            self.matriz_leds.restart(data=self.get_text())
+
+    def get_frecuencia(self):
+        return self.frecuencia.get_value()
+
+    def get_text(self):
+        return self.txt.get_text() or ' '
