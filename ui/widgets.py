@@ -110,16 +110,25 @@ class ModuloLeds(gtk.Table):
 
     def __init__(self):
         super(self.__class__, self).__init__(self.CANT_LEDS_X_COL, self.CANT_LEDS_X_FILA, homogeneous=True)
-        self.matriz = Matriz(self.CANT_LEDS_X_COL, self.CANT_LEDS_X_FILA)
+        self.activos = Matriz(self.CANT_LEDS_X_COL, self.CANT_LEDS_X_FILA)
+        self.inactivos = Matriz(self.CANT_LEDS_X_COL, self.CANT_LEDS_X_FILA)
+        # self.matriz = Matriz(self.CANT_LEDS_X_COL, self.CANT_LEDS_X_FILA)
         for i in range(self.CANT_LEDS_X_COL):
             for j in range(self.CANT_LEDS_X_FILA):
-                led = LED(self)
-                self.matriz[i, j] = led
-                self.attach(led, j, j+1, i, i+1, xpadding=self.PADDING, ypadding=self.PADDING)
+                activo = gtk.RadioButton()
+                self.activos[i, j] = activo
+                inactivo = gtk.RadioButton(activo)
+                self.inactivos[i, j] = inactivo
+                self.attach(inactivo, j, j+1, i, i+1, xpadding=self.PADDING, ypadding=self.PADDING)
+                # led = LED(self)
+                # self.matriz[i, j] = led
+                # self.attach(led, j, j+1, i, i+1, xpadding=self.PADDING, ypadding=self.PADDING)
 
     def __setitem__(self, position, value):
         i, j = position
-        self.matriz[i, j].set_active(value)
+        self.activos[i, j].set_active(not value)
+        self.inactivos[i, j].set_active(value)
+        # self.matriz[i, j].set_active(value)        
 
 
 # This creates the custom LED widget
