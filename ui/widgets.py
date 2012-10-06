@@ -8,6 +8,7 @@ from threading import Timer
 
 from lib.estructuras import Matriz
 from lib import funciones
+from lib.comm import Serializer
 
 class ComboFunciones:
     SENO = 'Seno'
@@ -56,12 +57,14 @@ class MatrizLeds(gtk.VBox):
     def set(self):
         self.destroy()
         self.matriz.set()
+        self.serialize()
         self.update_ui()
         Timer(5, self.clear).start()
 
     def clear(self):
         self.destroy()
         self.matriz.clear()
+        self.serialize()
         self.update_ui()
 
     def update_ui(self):
@@ -95,6 +98,9 @@ class MatrizLeds(gtk.VBox):
         else:
             funcion = funciones.Demo
         self.start(funcion)
+        
+    def serialize(self):
+        Serializer(self.matriz).write()
 
 
 class ModuloLeds(gtk.Table):
