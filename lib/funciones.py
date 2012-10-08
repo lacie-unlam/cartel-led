@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 
+import itertools
 from threading import Thread
 from time import sleep
 from pprint import pprint
@@ -74,18 +75,16 @@ class Texto(Funcion):
 	def __init__(self, matriz, callback, frecuencia, texto):
 		super(self.__class__, self).__init__(matriz, callback, frecuencia)
 		self.texto = texto
-		self.reset_indexes()
+		self.i, self.j = 0, 11
 
 	def compute(self):
-		for i, l in enumerate(list(self.texto[self.i:self.j])):
+		for i, l in enumerate(self.take(self.i, self.j)):
 			m = self.letter2matrix(l)
 			for f in range(m.filas):
 				for c in range(m.columnas):
 					self.matriz[2+f, (m.columnas)*i+c] = m[f, c]
 		self.i += 1
 		self.j += 1
-		if self.j > len(self.texto):
-			self.reset_indexes()
 
 	def letter2matrix(self, letter):
 		arr = font(letter) # ['7e', '11', '11', '11', '7e']
@@ -103,8 +102,10 @@ class Texto(Funcion):
 				m[m.filas-i-1, j] = aux
 		return m
 
-	def reset_indexes(self):
-		self.i, self.j = 0, 11
+	def take(self, start, stop):
+		"Return first n items of the iterable as a list"
+		texto = itertools.cycle(self.texto)
+		return list(itertools.islice(texto, start, stop))
 
 
 class Demo(Funcion):
